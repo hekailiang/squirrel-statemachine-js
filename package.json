@@ -1,0 +1,26 @@
+{
+  "name": "squirrel-statemachine",
+  "version": "0.0.0",
+  "description": "A javascript library providing state machine implementation",
+  "main": "index.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hekailiang/squirrel-statemachine-js.git"
+  },
+  "keywords": [
+    "javascript",
+    "statemachine"
+  ],
+  "author": "Henry He",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "~1.17.1",
+    "chai": "~1.9.0"
+  },
+  "dependencies": {
+    "lodash": "~2.4.1"
+  }
+}
