@@ -18,7 +18,10 @@ describe('#StateMachine basic function', function() {
 
 	  	transitions : [
 	  		{ from : "A", to : "B", on : "A2B", perform : "fromAToB" },
-	  		{ from : "B", to : "A", on : "B2A", perform : function() {this.callSequence += ".fromBToA";} }
+	  		{ from : "B", to : "A", on : "B2A", perform : function() { this.callSequence += ".fromBToA"; } },
+	  		{ from : "B", to : "C", on : "B2C", perform : function() { this.fire("C2D"); this.fire("D2E"); } },
+	  		{ from : "C", to : "D", on : "C2D" },
+	  		{ from : "D", to : "E", on : "D2E" },
 	  	]
 	  },
 
@@ -61,7 +64,7 @@ describe('#StateMachine basic function', function() {
 	it("A simple state machine should throw error when it is not started and its options 'isAutoStartEnabled' is false", 
 		function() {
 			var fireUnstartedFsmFunc = function() {
-				var stateMachineInstance = new SimpleStateMachine("A", {isAutoStartEnabled : false});
+				var stateMachineInstance = new SimpleStateMachine("A", {isAutoStartEnabled : false, isDebugInfoEnabled: true});
 				stateMachineInstance.fire("A2B");
 			};
 			expect(fireUnstartedFsmFunc).to.throw(/not running/); 
@@ -77,5 +80,11 @@ describe('#StateMachine basic function', function() {
 
 	  	stateMachineInstance2.fire("B2A");	  	
 	    stateMachineInstance2.callSequence.should.equal(".enterB.exitB.fromBToA.enterA");
+  });
+
+  it("Nested fired events should be processed after processing current event finished", function() {
+  	var stateMachineInstance = new SimpleStateMachine("B");
+  	stateMachineInstance.fire("B2C");
+  	stateMachineInstance.getCurrentState().should.equal("E");
   });
 });
