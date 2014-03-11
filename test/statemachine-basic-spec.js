@@ -100,4 +100,38 @@ describe('#StateMachine basic function', function() {
   	stateMachineInstance.fire("B2C");
   	stateMachineInstance.getCurrentState().should.equal("E");
   });
+
+  it("A simple state machine should be able to be extended from parent state machine with out affect parent", function() {
+  	var SimpleStateMachineEx = SimpleStateMachine.extend({
+  		definition : {
+  			initial : "B",
+  			states : {
+	  			A : { onEntry: "enterAFromEx" },
+	  			B : { onExit: "exitBFromEx"}
+	  		}
+  		},
+
+  		enterAFromEx : function() {
+  			this.callSequence += ".enterAFromEx";
+  		},
+
+  		exitBFromEx : function() {
+  			this.callSequence += ".exitBFromEx";
+  		}
+  	}),
+
+  	simpleStateMachineInstance = new SimpleStateMachine(),
+  	simpleStateMachineExInstance = new SimpleStateMachineEx();
+
+  	simpleStateMachineInstance.start();
+  	simpleStateMachineInstance.getCurrentState().should.equal("A");
+  	simpleStateMachineInstance.fire("A2B");
+	  simpleStateMachineInstance.callSequence.should.equal(".enterA.exitA.fromAToB.enterB");
+
+	  simpleStateMachineExInstance.start();
+	  simpleStateMachineExInstance.getCurrentState().should.equal("B");
+	  simpleStateMachineExInstance.fire("B2A");
+	  simpleStateMachineExInstance.callSequence.should.equal(".enterB.exitB.exitBFromEx.fromBToA.enterA.enterAFromEx");
+
+  });
 });
