@@ -131,7 +131,7 @@ describe('#StateMachine basic function', function() {
 	  simpleStateMachineExInstance.start();
 	  simpleStateMachineExInstance.getCurrentState().should.equal("B");
 	  simpleStateMachineExInstance.fire("B2A");
-	  simpleStateMachineExInstance.callSequence.should.equal(".enterB.exitB.exitBFromEx.fromBToA.enterA.enterAFromEx");
+	  simpleStateMachineExInstance.callSequence.should.equal(".enterB.exitBFromEx.exitB.fromBToA.enterAFromEx.enterA");
   });
 
 	it("A extended state machine should be able to override parent state machine action method", function() {
@@ -145,7 +145,7 @@ describe('#StateMachine basic function', function() {
 		simpleStateMachineExInstance.start();
 	  simpleStateMachineExInstance.getCurrentState().should.equal("A");
 	  simpleStateMachineExInstance.fire("A2B");
-	  simpleStateMachineExInstance.callSequence.should.equal("");
+	  simpleStateMachineExInstance.callSequence.should.equal(".enterAFromEx.enterA.exitA.fromAToB.enterB");
 	});
 
 });
