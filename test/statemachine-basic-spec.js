@@ -25,6 +25,7 @@ describe('#StateMachine basic function', function() {
 	  		{ from : "B", to : "C", on : "B2C", perform : function() { this.fire("C2D"); this.fire("D2E"); } },
 	  		{ from : "C", to : "D", on : "C2D" },
 	  		{ from : "D", to : "E", on : "D2E" },
+	  		{ from : "D", to : "F", on : "D2F", when : function(context) {return context>10;} },
 	  		{ from : "A", to : "F", on : "END" }
 	  	]
 	  },
@@ -93,6 +94,14 @@ describe('#StateMachine basic function', function() {
 
 	  	stateMachineInstance2.fire("B2A");	  	
 	    stateMachineInstance2.callSequence.should.equal(".enterB.exitB.fromBToA.enterA");
+  });
+
+  it("A simple conditional transition should be completed only when condition satisfied", function() {
+  	var stateMachineInstance = new SimpleStateMachine("D");
+  	stateMachineInstance.fire("D2F", 5);
+  	stateMachineInstance.getCurrentState().should.equal("D");
+  	stateMachineInstance.fire("D2F", 15);
+  	stateMachineInstance.getCurrentState().should.equal("F");
   });
 
   it("Nested fired events should be processed after processing current event finished", function() {
