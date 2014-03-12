@@ -14,8 +14,8 @@ describe('#StateMachine basic function', function() {
       states : {
         A : { onEntry: "enterA", onExit: "exitA" },
         B : { onEntry: "enterB", onExit: "exitB" },
-        F : { onEntry: function() { this.callSequence += ".enterF"; }, 
-              onExit:  function() { this.callSequence += ".exitF"; }, 
+        F : { onEntry: function() { this.callSequence += ".enterF"; },
+              onExit:  function() { this.callSequence += ".exitF"; },
               final: true }
       },
 
@@ -57,7 +57,7 @@ describe('#StateMachine basic function', function() {
     }
   });
 
-  it("A simple state machine should enter its initial states and status should be idle when started", 
+  it("A simple state machine should enter its initial states and status should be idle when started",
     function() {
       var stateMachineInstance = new SimpleStateMachine("A");
       // expect(stateMachineInstance.getCurrentState()).to.be.null;
@@ -67,16 +67,16 @@ describe('#StateMachine basic function', function() {
       stateMachineInstance.getStatus().should.equal(squirrel.StateMachineStatus.IDLE);
   });
 
-  it("A simple state machine should throw error when it is not started and its options 'isAutoStartEnabled' set to false", 
+  it("A simple state machine should throw error when it is not started and its options 'isAutoStartEnabled' set to false",
     function() {
       var fireUnstartedFsmFunc = function() {
         var stateMachineInstance = new SimpleStateMachine("A", {isAutoStartEnabled : false, isDebugInfoEnabled: true});
         stateMachineInstance.fire("A2B");
       };
-      expect(fireUnstartedFsmFunc).to.Throw(/not running/); 
+      expect(fireUnstartedFsmFunc).to.Throw(/not running/);
   });
 
-  it("A simple state machine should auto terminated when entering in final state with option 'isAutoTerminate' set to true.", 
+  it("A simple state machine should auto terminated when entering in final state with option 'isAutoTerminate' set to true.",
     function() {
       var stateMachineInstance = new SimpleStateMachine();
       stateMachineInstance.fire("END");
@@ -84,15 +84,15 @@ describe('#StateMachine basic function', function() {
       stateMachineInstance.getStatus().should.equal(squirrel.StateMachineStatus.TERMINATED);
   });
 
-  it("A simple external transition should include old state exit, transition perform and new state entry", 
+  it("A simple external transition should include old state exit, transition perform and new state entry",
     function() {
-      var stateMachineInstance = new SimpleStateMachine(), 
+      var stateMachineInstance = new SimpleStateMachine(),
       stateMachineInstance2 = new SimpleStateMachine("B");
 
       stateMachineInstance.fire("A2B");
       stateMachineInstance.callSequence.should.equal(".enterA.exitA.fromAToB.enterB");
 
-      stateMachineInstance2.fire("B2A");      
+      stateMachineInstance2.fire("B2A");
       stateMachineInstance2.callSequence.should.equal(".enterB.exitB.fromBToA.enterA");
   });
 
