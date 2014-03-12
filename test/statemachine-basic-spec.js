@@ -148,4 +148,15 @@ describe('#StateMachine basic function', function() {
 	  simpleStateMachineExInstance.callSequence.should.equal(".enterAFromEx.enterA.exitA.fromAToB.enterB");
 	});
 
+	it("A simple state machine will trigger various kind of transition events during state transition", function() {
+		var simpleStateMachineInstance = new SimpleStateMachine(), result="";
+		simpleStateMachineInstance.on("beforeTransitionBegin", function(fromStateId, event) {
+			result += "[Begin] from: "+fromStateId+", on: "+event+"; ";
+		}).bind("afterTransitionCompleted", function(fromStateId, toStateId, event) {
+			result += "[Completed] from: "+fromStateId+", to: "+toStateId+", on: "+event+";";
+		});
+		simpleStateMachineInstance.fire("A2B");
+		result.should.equal("[Begin] from: A, on: A2B; [Completed] from: A, to: B, on: A2B;");
+	});
+
 });
