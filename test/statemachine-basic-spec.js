@@ -143,6 +143,31 @@ describe('#StateMachine basic function', function() {
 	  simpleStateMachineExInstance.callSequence.should.equal(".enterB.exitBFromEx.exitB.fromBToA.enterAFromEx.enterA");
   });
 
+	it("A state machine action invoke order should be able to adjust through priority", function() {
+		var SimpleStateMachineEx = SimpleStateMachine.extend({
+  		definition : {
+  			initial : "B",
+  			states : {
+	  			A : { onEntry: "enterAFromEx:0" }, // invoked after original entry method
+	  			B : { onExit: "exitBFromEx:0"}     // invoked after original entry method
+	  		}
+  		},
+
+  		enterAFromEx : function() {
+  			this.callSequence += ".enterAFromEx";
+  		},
+
+  		exitBFromEx : function() {
+  			this.callSequence += ".exitBFromEx";
+  		}
+  	}),
+  	simpleStateMachineExInstance = new SimpleStateMachineEx();
+  	simpleStateMachineExInstance.start();
+	  simpleStateMachineExInstance.getCurrentState().should.equal("B");
+	  simpleStateMachineExInstance.fire("B2A");
+	  simpleStateMachineExInstance.callSequence.should.equal(".enterB.exitB.exitBFromEx.fromBToA.enterA.enterAFromEx");
+	});
+
 	it("A extended state machine should be able to override parent state machine action method", function() {
 		var SimpleStateMachineEx = SimpleStateMachine.extend({
 			enterA : function() {
