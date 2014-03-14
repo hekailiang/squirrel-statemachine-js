@@ -9,7 +9,7 @@ describe('#StateMachine basic function', function() {
   'use strict';
   var SimpleStateMachine = StateMachine.extend({
     // state machine definition
-    definition : {
+    statemachine : {
       states : {
         A : { onEntry: "enterA", onExit: "exitA", initial:true },
         B : { onEntry: "enterB", onExit: "exitB" },
@@ -99,7 +99,7 @@ describe('#StateMachine basic function', function() {
 
   it("A simple state machine should be able to be extended from parent state machine with out affect parent", function() {
     var SimpleStateMachineEx = SimpleStateMachine.extend({
-      definition : {
+      statemachine : {
         initial : "B",
         states : {
           A : { onEntry: "enterAFromEx" },
@@ -132,7 +132,7 @@ describe('#StateMachine basic function', function() {
 
   it("A state machine action invoke order should be able to adjust through priority", function() {
     var SimpleStateMachineEx = SimpleStateMachine.extend({
-      definition : {
+      statemachine : {
         initial : "B",
         states : {
           A : { onEntry: "enterAFromEx:0" }, // invoked after original entry method

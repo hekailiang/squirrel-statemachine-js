@@ -4,23 +4,25 @@ var should = require('chai').should(),
     expect = require('chai').expect,
     squirrel = require('../index'),
     StateMachine = squirrel.StateMachine,
-    Events = squirrel.Events;
+    Events = squirrel.Events,
+    keywords = squirrel.Keywords;
 
 describe('#Hierarchical StateMachine function', function() {
   'use strict';
+
   var HierarchicalStateMachine = StateMachine.extend({
-    definition : {
+    statemachine : {
       states : {
         A : {
           onEntry : "entryA",
           onExit : "exitA",
           initial : true,
-          childStates : {
+          children : {
             A1 : {
               onEntry : "entryA1",
               onExit : "exitA1",
               initial : true,
-              childStates : {
+              children : {
                 A1a : {onEntry : "entryA1a", onExit : "exitA1a", initial : true},
                 A1b : {onEntry : "entryA1b", onExit : "exitA1b"}
               }
@@ -59,4 +61,5 @@ describe('#Hierarchical StateMachine function', function() {
     stateMachineInstance.terminate();
     stateMachineInstance.callSequence.should.equal(".exitA1a.exitA1.exitA");
   });
+  
 });
