@@ -39,7 +39,7 @@ describe('#StateMachine basic function', function() {
        this.callSequence += ".enterA";
     },
 
-    unfoundMethod : function(methodName) {
+    methodMissing : function(methodName) {
       this.callSequence += "."+methodName;
     }
   });
