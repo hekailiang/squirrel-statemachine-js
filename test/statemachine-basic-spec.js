@@ -31,28 +31,16 @@ describe('#StateMachine basic function', function() {
 
     // state machine initialize function
     initialize : function() {
-       this.callSequence = "";
-     },
+      this.callSequence = "";
+    },
 
      // state machine actions
     enterA : function() {
        this.callSequence += ".enterA";
     },
 
-    exitA : function() {
-       this.callSequence += ".exitA";
-    },
-
-    fromAToB : function() {
-      this.callSequence += ".fromAToB";
-    },
-
-    enterB : function() {
-       this.callSequence += ".enterB";
-     },
-
-    exitB : function() {
-      this.callSequence += ".exitB";
+    unfoundMethod : function(methodName) {
+      this.callSequence += "."+methodName;
     }
   });
 
@@ -165,13 +153,14 @@ describe('#StateMachine basic function', function() {
     simpleStateMachineExInstance.getCurrentState().should.equal("B");
     simpleStateMachineExInstance.fire("B2A");
     simpleStateMachineExInstance.callSequence.should.equal(".enterB.exitB.exitBFromEx.fromBToA.enterA.enterAFromEx");
+    // console.log(simpleStateMachineExInstance.getEffectiveDefinition());
   });
 
   it("A extended state machine should be able to override parent state machine action method", function() {
     var SimpleStateMachineEx = SimpleStateMachine.extend({
       enterA : function() {
         this.callSequence += ".enterAFromEx";
-        SimpleStateMachine.prototype.enterA.call(this, arguments);
+        SimpleStateMachineEx.__super__.enterA.call(this, arguments);
       }
     }),
     simpleStateMachineExInstance = new SimpleStateMachineEx();
