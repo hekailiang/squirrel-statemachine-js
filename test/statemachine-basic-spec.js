@@ -1,18 +1,17 @@
 /*global require, module, it, describe*/
-/*jshint expr: true*/
 var should = require('chai').should(),
     expect = require('chai').expect,
     squirrel = require('../index'),
-    StateMachine = squirrel.StateMachine;
+    StateMachine = squirrel.StateMachine,
+    Events = squirrel.Events;
 
 describe('#StateMachine basic function', function() {
   'use strict';
   var SimpleStateMachine = StateMachine.extend({
     // state machine definition
     definition : {
-      initial : "A",
       states : {
-        A : { onEntry: "enterA", onExit: "exitA" },
+        A : { onEntry: "enterA", onExit: "exitA", initial:true },
         B : { onEntry: "enterB", onExit: "exitB" },
         F : { onEntry: function() { this.callSequence += ".enterF"; },
               onExit:  function() { this.callSequence += ".exitF"; },
@@ -184,9 +183,9 @@ describe('#StateMachine basic function', function() {
 
   it("A simple state machine will trigger various kind of transition events during state transition", function() {
     var simpleStateMachineInstance = new SimpleStateMachine(), result="";
-    simpleStateMachineInstance.on("beforeTransitionBegin", function(fromStateId, event) {
+    simpleStateMachineInstance.on(Events.TRANSITION_BEGIN, function(fromStateId, event) {
       result += "[Begin] from: "+fromStateId+", on: "+event+"; ";
-    }).bind("afterTransitionCompleted", function(fromStateId, toStateId, event) {
+    }).bind(Events.TRANSITION_COMPLETE, function(fromStateId, toStateId, event) {
       result += "[Completed] from: "+fromStateId+", to: "+toStateId+", on: "+event+";";
     });
     simpleStateMachineInstance.fire("A2B");
