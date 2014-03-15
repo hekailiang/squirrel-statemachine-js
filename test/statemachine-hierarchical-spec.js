@@ -5,7 +5,8 @@ var should = require('chai').should(),
     squirrel = require('../index'),
     StateMachine = squirrel.StateMachine,
     Events = squirrel.Events,
-    TransitionType = squirrel.TransitionType;
+    TransitionType = squirrel.TransitionType,
+    HistoryType = squirrel.HistoryType;
 
 describe('#Hierarchical StateMachine function', function() {
   'use strict';
@@ -47,7 +48,35 @@ describe('#Hierarchical StateMachine function', function() {
 
             B2 : { onEntry : "entryB2", onExit : "exitB2" }
           }
-        }
+        },
+
+        C : {
+          history : HistoryType.DEEP,
+          children : {
+            C1 : {
+              history : HistoryType.DEEP,
+              children : {
+                C1a : {},
+                C1b : {}
+              }
+            },
+            C2 : {}
+          }
+        },
+
+        D: {
+          history : HistoryType.SHALLOW,
+          children : {
+            D1 : {
+              history : HistoryType.SHALLOW,
+              children : {
+                D1a : {},
+                D1b : {}
+              }
+            },
+            D2 : {}
+          }
+        },
       },
 
       transitions : [
@@ -59,7 +88,9 @@ describe('#Hierarchical StateMachine function', function() {
         {from: "B2", to: "A2",  on: "B22A2", perform: "fromB22A2OnB22A2"},
         {from: "B", to: "B", on: "B2B_SELF", perform: "fromB2BOnB2B"},
         {from: "B2", to: "B2", on: "B22B2_INTER", perform: "fromB22B2OnB22B2", type: TransitionType.INTERNAL},
-        {from: "A", to: "B", on: "A2B", perform: "fromA2BOnA2B"}
+        {from: "A", to: "B", on: "A2B", perform: "fromA2BOnA2B"},
+        {from: "C", to: "D", on: "C2D", perform: "fromC2DOnC2D"},
+        {from: "D", to: "C", on: "D2C", perform: "fromD2COnD2C"}
       ]
     },
 
@@ -171,6 +202,28 @@ describe('#Hierarchical StateMachine function', function() {
     stateMachineInstance.callSequence = "";
     stateMachineInstance.fire("A2B");
     stateMachineInstance.callSequence.should.equal(".exitA1a.exitA1.exitA.fromA2BOnA2B.entryB");
+  });
+
+  it("The shallow state enters into its last active sub-state. The sub-state itself enters its initial sub-state "+
+    "and so on until the innermost nested state is reached", function() {
+    var stateMachineInstance = new HierarchicalStateMachine("D1a");
+    stateMachineInstance.start();
+    stateMachineInstance.getCurrentState().should.equal("D1a");
+    stateMachineInstance.fire("D2C");
+    stateMachineInstance.getCurrentState().should.equal("C");
+    stateMachineInstance.fire("C2D");
+    stateMachineInstance.getCurrentState().should.equal("D1");
+  });
+
+  it("The state enters into its last active sub-state. The sub-state itself enters into-its last active state "+
+    "and so on until the innermost nested state is reached", function() {
+    var stateMachineInstance = new HierarchicalStateMachine("C1b");
+    stateMachineInstance.start();
+    stateMachineInstance.getCurrentState().should.equal("C1b");
+    stateMachineInstance.fire("C2D");
+    stateMachineInstance.getCurrentState().should.equal("D");
+    stateMachineInstance.fire("D2C");
+    stateMachineInstance.getCurrentState().should.equal("C1b");
   });
 
 });
