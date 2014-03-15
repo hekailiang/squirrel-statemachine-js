@@ -93,6 +93,12 @@ describe('#StateMachine extension function', function() {
     stateMachine.callSequence = "";
     stateMachine.fire("A2B", 15);
     stateMachine.callSequence.should.equal("exitA.fromA2B1.transitFromAToAnyOnA2B.entryB.entryB1");
+
+    stateMachine = new ExtensionStateMachine();
+    stateMachine.start();
+    stateMachine.callSequence = "";
+    stateMachine.fire("A2B");
+    stateMachine.callSequence.should.equal("exitA.fromA2B.transitFromAToAnyOnA2B.entryB");
   });
 
   // initial state override[a][b][c]
