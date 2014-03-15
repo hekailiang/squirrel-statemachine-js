@@ -118,15 +118,15 @@ describe('#Hierarchical StateMachine function', function() {
     stateMachineInstance.callSequence.should.equal(".exitA1a.exitA1.exitA");
   });
 
-  it("There is no target state (internal transition)", function() {
-    var stateMachineInstance = new HierarchicalStateMachine("A1a");
+  it("The source and target state are the same", function() {
+    var stateMachineInstance = new HierarchicalStateMachine("B");
     stateMachineInstance.start();
     stateMachineInstance.callSequence = "";
-    stateMachineInstance.terminate();
-    stateMachineInstance.callSequence.should.equal(".exitA1a.exitA1.exitA");
+    stateMachineInstance.fire("B2B_SELF");
+    stateMachineInstance.callSequence.should.equal(".exitB.fromB2BOnB2B.entryB");
   });
 
-  it("The source and target state are the same", function() {
+  it("There is no target state (internal transition)", function() {
     var stateMachineInstance = new HierarchicalStateMachine("B2");
     stateMachineInstance.start();
     stateMachineInstance.getCurrentState().should.equal("B2");
