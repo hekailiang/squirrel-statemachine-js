@@ -12,7 +12,7 @@ describe('#Hierarchical StateMachine function', function() {
   'use strict';
 
   var HierarchicalStateMachine = StateMachine.extend({
-    statemachine : {
+    machine : {
       states : {
         A : {
           onEntry : "entryA",

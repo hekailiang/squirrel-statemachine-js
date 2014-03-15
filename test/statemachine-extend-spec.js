@@ -12,7 +12,7 @@ describe('#StateMachine extension function', function() {
   'use strict';
 
   var BaseExtensionStateMachine = StateMachine.extend({
-      statemachine : {
+      machine : {
         initial : "A",
         states : {
           A: {onEntry: "entryA", onExit: "exitA"},
@@ -70,7 +70,7 @@ describe('#StateMachine extension function', function() {
 
   it("transitFrom[source]ToAnyOn[event] extension method should be called when naming convention satisfied",  function() {
     var ExtensionStateMachine = BaseExtensionStateMachine.extend({
-      statemachine : {
+      machine : {
         states : {
           B : {
             children : {
@@ -107,7 +107,7 @@ describe('#StateMachine extension function', function() {
   // transition action merge
   it("Transition in extended state machine should merge its actions with the matched transition in base state machine.", function() {
     var ExtensionStateMachine = BaseExtensionStateMachine.extend({
-      statemachine : {
+      machine : {
         transitions : [
           {from: "A", to: "B", on: "A2B", perform: "fromA2BEx"}
         ]
