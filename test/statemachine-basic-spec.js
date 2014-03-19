@@ -1,4 +1,5 @@
 /*global require, module, it, describe*/
+/*jslint nomen: true*/
 var should = require('chai').should(),
     expect = require('chai').expect,
     squirrel = require('../index'),
