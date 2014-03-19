@@ -154,14 +154,13 @@ describe('#StateMachine basic function', function() {
     simpleStateMachineExInstance.getCurrentState().should.equal("B");
     simpleStateMachineExInstance.fire("B2A");
     simpleStateMachineExInstance.callSequence.should.equal(".enterB.exitB.exitBFromEx.fromBToA.enterA.enterAFromEx");
-    // console.log(JSON.stringify(simpleStateMachineExInstance.getEffectiveDefinition(), null, 2));
   });
 
   it("A extended state machine should be able to override parent state machine action method", function() {
     var SimpleStateMachineEx = SimpleStateMachine.extend({
       enterA : function() {
         this.callSequence += ".enterAFromEx";
-        SimpleStateMachineEx.__super__.enterA.call(this, arguments);
+        this.callsuper("enterA", arguments); // call super state machine class enterA method
       }
     }),
     simpleStateMachineExInstance = new SimpleStateMachineEx();
