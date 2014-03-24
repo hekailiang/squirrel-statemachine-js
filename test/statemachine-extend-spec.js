@@ -79,7 +79,7 @@ describe('#StateMachine extension function', function() {
           }
         },
         transitions : [
-          {from: "A", to: "B1", on: "A2B", perform: "fromA2B1", when: function(context) {return context>10;} }
+          {from: "A", to: "B1", on: "A2B", perform: "fromA2B1", when: "context>10" }
         ]
       },
 
