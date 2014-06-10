@@ -3,7 +3,7 @@ squirrel-statemachine.js is a javascript implementation of [squirrel-foundation]
 
 ### Sample Code: 
 
-```
+```javascript  
 var SimpleStateMachine = Squirrel.StateMachine.extend({
     // state machine definition
     machine : {
